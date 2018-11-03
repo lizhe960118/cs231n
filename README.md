@@ -44,8 +44,8 @@
 - [ConvolutionalNetworks.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/ConvolutionalNetworks.ipynb) 卷积网络的使用
 
 ## week7
-- [cifar10_tensorflow.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/cifar10_tensorflow.ipynb) 使用tensorflow完成CIFA10分类
-- [cifar10_Pytorch.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/cifar10_pytorch.ipynb) 使用pytorch完成CIFA10分类
+- [cifar10_tensorflow.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/cifar10-tensorflow.ipynb) 使用tensorflow完成CIFA10分类
+- [cifar10_Pytorch.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/cifar10-pytorch.ipynb) 使用pytorch完成CIFA10分类
 
 ## week8
 - [rnn_layers.py]()  VanillaRNN,word_embeddding, LSTM前向反向的实现
