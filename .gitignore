@@ -5,3 +5,5 @@
 *.egg-info
 dist
 build
+
+assignment3/cs231n/datasets/*
