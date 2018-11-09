@@ -48,14 +48,14 @@
 - [cifar10_Pytorch.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment2/cifar10-pytorch.ipynb) 使用pytorch完成CIFA10分类
 
 ## week8
-- [rnn_layers.py]()  VanillaRNN,word_embeddding, LSTM前向反向的实现
-- [coco_utils.py]() coco数据集的处理
-- [pretrained_cnn.py]() 预训练的cnn的实现
-- [rnn.py]() 搭建RNN模型
-- [captioning_solver.py]() 搭建一个整体的训练框架
-- [RNN_Captioning.ipynb]() 使用普通RNN进行图像标注
-- [LSTM_Captioning.ipynb]() 实现LSTM，并应用于在微软COCO数据集上进行图像标注。
+- [rnn_layers.py](https://github.com/lizhe960118/cs231n/blob/master/assignment3/cs231n/layer_rnn.py)  VanillaRNN,word_embeddding, LSTM前向反向的实现
+- [coco_utils.py](https://github.com/lizhe960118/cs231n/blob/master/assignment3/cs231n/coco_utils.py) coco数据集的处理
+- [rnn.py](https://github.com/lizhe960118/cs231n/blob/master/assignment3/cs231n/classifiers/rnn.py) 搭建RNN模型
+- [captioning_solver.py](https://github.com/lizhe960118/cs231n/blob/master/assignment3/cs231n/captioning_solver.py) 搭建一个整体的训练框架
+- [RNN_Captioning.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment3/RNN_captioning.ipynb) 使用普通RNN进行图像标注
+- [LSTM_Captioning.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment3/LSTM_Captioning.ipynb) 实现LSTM，并应用于在微软COCO数据集上进行图像标注。
 
 ## week9
-- [ImageGradients.ipynb]() 使用TinyImageNet数据集计算梯度
-- [ImageGeneration.ipynb]() 使用一个训练好的TinyImageNet模型来生成图像
+- [pretrained_cnn.py]() 预训练的cnn的实现
+- [Image_Gradients.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment3/Image_Gradients.ipynb) 使用TinyImageNet数据集计算梯度
+- [Image_Generation.ipynb](https://github.com/lizhe960118/cs231n/blob/master/assignment3/Image_Generation.ipynb) 使用一个训练好的TinyImageNet模型来生成图像
