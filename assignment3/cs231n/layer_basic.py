@@ -91,12 +91,12 @@ def batchnorm_forward(x, gamma, beta, bn_param):
     running_var = bn_param.get('running_var', np.zeros(D, dtype=x.dtype))
     out, cache = None, None
 
-    if mode == 'train':
+    if mode == 'train':    
         sample_mean = np.mean(x, axis=0)
         sample_var = np.var(x, axis=0)
         xhat = (x - sample_mean) / np.sqrt(sample_var + eps)
         out = gamma * xhat + beta
-        cache = (gamma, x, sample_mean, sample_var, eps, xhat)
+        cache = (mode, gamma, x, sample_mean, sample_var, eps, xhat)
 
         running_mean = momentum * running_mean + (1 - momentum) * sample_mean
 #         print(sample_mean[0],running_mean[0])
@@ -106,8 +106,10 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 #         scale = gamma / np.sqrt(running_var + eps)
 #         out = x * scale + (beta - running_mean * scale)
 #         print(scale[0])
-        xhat = (x - running_mean) / np.sqrt(running_var + eps)
+        test_var = np.sqrt(running_var + eps)
+        xhat = (x - running_mean) / test_var
         out = gamma * xhat + beta
+        cache = (mode, gamma, x, test_var, xhat)
 #         print(gamma[0], beta[0], running_mean[0], running_var[0], out[0])
     else:
         raise ValueError('Invalid forward batch_norm mode "%s"' % mode)
@@ -128,27 +130,38 @@ def batchnorm_backward(dout, cache):
         - dgamma: shape of (D,)
         - dbeta: shape of (D,)
     """
-    gamma, x, sample_mean, sample_var, eps, xhat = cache
-    N, D = x.shape
+    mode = cache[0]
+    if mode == 'train':
+        mode, gamma, x, sample_mean, sample_var, eps, xhat = cache
+        N, D = x.shape
 
-    dbeta = np.sum(dout, axis=0)
-    dgamma = np.sum(dout * xhat, axis=0)
+        dbeta = np.sum(dout, axis=0)
+        dgamma = np.sum(dout * xhat, axis=0)
 
-    dxhat = dout * gamma
+        dxhat = dout * gamma
 
-    dx3 = ((sample_var + eps) ** -0.5) * dxhat
-    dvar_tmp = np.sum((x - sample_mean) * dxhat, axis=0)
-    dvar = (-0.5) * ((sample_var + eps) ** -1.5) * dvar_tmp
-    un_sum_dmean2 = (-1) * dx3
+        dx3 = ((sample_var + eps) ** -0.5) * dxhat
+        dvar_tmp = np.sum((x - sample_mean) * dxhat, axis=0)
+        dvar = (-0.5) * ((sample_var + eps) ** -1.5) * dvar_tmp
+        un_sum_dmean2 = (-1) * dx3
 
-    dx2_tmp = 2 * dvar * (x - sample_mean)
-    dx2 = np.ones_like(x) / N * dx2_tmp
-    un_sum_dmean1 = (-1) * dx2
+        dx2_tmp = 2 * dvar * (x - sample_mean)
+        dx2 = np.ones_like(x) / N * dx2_tmp
+        un_sum_dmean1 = (-1) * dx2
 
-    un_sum_dmean = un_sum_dmean1 + un_sum_dmean2
-    dmean = np.sum(un_sum_dmean, axis=0)
-    dx1 = np.ones_like(x) / N * dmean
-    dx = dx1 + dx2 + dx3
+        un_sum_dmean = un_sum_dmean1 + un_sum_dmean2
+        dmean = np.sum(un_sum_dmean, axis=0)
+        dx1 = np.ones_like(x) / N * dmean
+        dx = dx1 + dx2 + dx3
+    elif mode == 'test':
+        mode, gamma, x, test_var, xhat = cache
+        dbeta = dout.sum(axis=0)
+        dgamma = np.sum(xhat * dout, axis=0)
+        dxhat = gamma * dout
+        dx = dxhat / test_var
+    else:
+        raise ValueError('Invalid forward batch_norm mode "%s"' % mode)    
+        
     return dx, dgamma, dbeta
 
 
@@ -395,7 +408,7 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
 def spatial_batchnorm_backward(dout, cache):
 
     N, C, H, W = dout.shape
-    temp_dx, dgamma, dbeta = batchnorm_backward_alt(dout.transpose(0, 3, 2, 1).reshape((N * H * W, C)), cache)
+    temp_dx, dgamma, dbeta = batchnorm_backward(dout.transpose(0, 3, 2, 1).reshape((N * H * W, C)), cache)
     dx = temp_dx.reshape(N, W, H,  C).transpose(0, 3, 2, 1)
 
     return dx, dgamma, dbeta

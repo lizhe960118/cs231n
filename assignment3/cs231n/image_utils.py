@@ -58,9 +58,11 @@ def deprocess_image(img, mean_img, mean='image', renorm=False):
         mean = 0
     else:
         raise ValueError('mean must be image or pixel or none')
+        
     if img.ndim == 3:
         img = img[None]
-    img = (img + mean).transpose(1, 2, 0)
+    img = (img + mean)[0].transpose(1, 2, 0)
+    
     if renorm:
         low, high = img.min(), img.max()
         img = 255.0 * (img - low) / (high - low)
